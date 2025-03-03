@@ -1,0 +1,149 @@
+#include <stdio.h>
+#include <string.h>
+
+// Structure to hold workout details
+typedef struct {
+    char exercise[50];
+    int sets;
+    int reps;
+    int weight;
+    char notes[100];
+} Workout;
+
+// Structure to hold meal details
+typedef struct {
+    char mealType[20];  // E.g., "Breakfast", "Lunch", etc.
+    char food[100];
+    int quantity;
+    int calories;
+    int protein;
+    int carbs;
+    int fat;
+    char notes[100];
+} Meal;
+
+// Function to input workout details
+void inputWorkout(Workout *workout) {
+    printf("Enter Exercise Name: ");
+    getchar();  // to consume newline character left by previous input
+    fgets(workout->exercise, 50, stdin);
+    workout->exercise[strcspn(workout->exercise, "\n")] = '\0'; // Remove newline character
+
+    printf("Enter Sets: ");
+    scanf("%d", &workout->sets);
+    
+    printf("Enter Reps: ");
+    scanf("%d", &workout->reps);
+
+    printf("Enter Weight (lbs): ");
+    scanf("%d", &workout->weight);
+    
+    printf("Enter Notes: ");
+    getchar(); // consume newline
+    fgets(workout->notes, 100, stdin);
+    workout->notes[strcspn(workout->notes, "\n")] = '\0'; // Remove newline
+}
+
+// Function to input meal details
+void inputMeal(Meal *meal) {
+    printf("Enter Meal Type (Breakfast, Lunch, etc.): ");
+    getchar();  // to consume newline character
+    fgets(meal->mealType, 20, stdin);
+    meal->mealType[strcspn(meal->mealType, "\n")] = '\0'; // Remove newline character
+
+    printf("Enter Food Name: ");
+    fgets(meal->food, 100, stdin);
+    meal->food[strcspn(meal->food, "\n")] = '\0'; // Remove newline character
+    
+    printf("Enter Quantity: ");
+    scanf("%d", &meal->quantity);
+    
+    printf("Enter Calories: ");
+    scanf("%d", &meal->calories);
+
+    printf("Enter Protein (g): ");
+    scanf("%d", &meal->protein);
+
+    printf("Enter Carbs (g): ");
+    scanf("%d", &meal->carbs);
+
+    printf("Enter Fat (g): ");
+    scanf("%d", &meal->fat);
+    
+    printf("Enter Notes: ");
+    getchar(); // consume newline
+    fgets(meal->notes, 100, stdin);
+    meal->notes[strcspn(meal->notes, "\n")] = '\0'; // Remove newline
+}
+
+// Function to display workout details
+void displayWorkout(Workout workout) {
+    printf("\nWorkout Details:\n");
+    printf("Exercise: %s\n", workout.exercise);
+    printf("Sets: %d | Reps: %d | Weight: %d lbs\n", workout.sets, workout.reps, workout.weight);
+    printf("Notes: %s\n", workout.notes);
+}
+
+// Function to display meal details
+void displayMeal(Meal meal) {
+    printf("\nMeal Details:\n");
+    printf("Meal Type: %s\n", meal.mealType);
+    printf("Food: %s | Quantity: %d\n", meal.food, meal.quantity);
+    printf("Calories: %d | Protein: %d g | Carbs: %d g | Fat: %d g\n", meal.calories, meal.protein, meal.carbs, meal.fat);
+    printf("Notes: %s\n", meal.notes);
+}
+
+int main() {
+    int workoutCount = 0, mealCount = 0;
+    char choice;
+    
+    Workout workouts[10];  // Array to store workouts (max 10 workouts)
+    Meal meals[10];        // Array to store meals (max 10 meals)
+
+    do {
+        printf("\nWorkout and Eating Tracker\n");
+        printf("1. Add Workout\n");
+        printf("2. Add Meal\n");
+        printf("3. View Workouts\n");
+        printf("4. View Meals\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf(" %c", &choice);  // Space before %c to consume any leftover newline
+
+        switch(choice) {
+            case '1':
+                if (workoutCount < 10) {
+                    inputWorkout(&workouts[workoutCount]);
+                    workoutCount++;
+                } else {
+                    printf("Max workout entries reached.\n");
+                }
+                break;
+            case '2':
+                if (mealCount < 10) {
+                    inputMeal(&meals[mealCount]);
+                    mealCount++;
+                } else {
+                    printf("Max meal entries reached.\n");
+                }
+                break;
+            case '3':
+                for (int i = 0; i < workoutCount; i++) {
+                    displayWorkout(workouts[i]);
+                }
+                break;
+            case '4':
+                for (int i = 0; i < mealCount; i++) {
+                    displayMeal(meals[i]);
+                }
+                break;
+            case '5':
+                printf("Exiting program...\n");
+                break;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    } while(choice != '5');
+    
+    return 0;
+}
